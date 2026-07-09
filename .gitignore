@@ -38,3 +38,5 @@ backend/ark_fusion/data/
 
 # Raw RGB-D files
 *.bin
+LocalConfig.swift
+**/LocalConfig.swift
