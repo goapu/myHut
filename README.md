@@ -4,37 +4,75 @@
 
 The project combines a SwiftUI + ARKit iOS app with an `ark_fusion` backend. The iPhone captures RGB images, depth maps, camera poses, intrinsics, confidence maps, timestamps, and metadata, then streams them to a local backend server for saving and reconstruction.
 
+> This project is currently maintained as a private development repository.
+
 ---
 
 ## Overview
 
 myHut is designed for three capture workflows:
 
-| Capture Mode | Purpose | Backend Mode |
-|---|---|---|
-| **Object Scan** | Capture one focused object for 3D reconstruction | `object` |
-| **Room Measurement** | Capture walls, floor, and ceiling for room dimensions | `measure_room` |
-| **Full Room Scan** | Capture a complete room including furniture and layout | `room_full` |
+| Capture Mode         | Purpose                                                | Backend Mode   |
+| -------------------- | ------------------------------------------------------ | -------------- |
+| **Object Scan**      | Capture one focused object for 3D reconstruction       | `object`       |
+| **Room Measurement** | Capture walls, floor, and ceiling for room dimensions  | `measure_room` |
+| **Full Room Scan**   | Capture a complete room including furniture and layout | `room_full`    |
 
 The app streams RGB-D data over your local network. The backend receives the data, stores capture sessions, and runs the reconstruction pipeline.
 
 ---
 
+## Quick Start
+
+Clone the repository:
+
+```bash
+git clone https://github.com/goapu/myHut.git
+cd myHut
+```
+
+Start the backend:
+
+```bash
+cd backend/ark_fusion
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python upload_server.py --host 0.0.0.0 --port 5001 --workspace .
+```
+
+Open the iOS app:
+
+```bash
+open ../../iOS/myHut-iOS/RGBrecoder.xcodeproj
+```
+
+Before running the app, create your local config file:
+
+```bash
+cp ../../iOS/myHut-iOS/RGBrecoder/LocalConfig.example.swift \
+   ../../iOS/myHut-iOS/RGBrecoder/LocalConfig.swift
+```
+
+Edit `LocalConfig.swift` and set your backend computer’s local IP address.
+
+---
+
 ## Features
 
-- SwiftUI + ARKit iPhone capture app
-- Live RGB-D streaming to a local backend
-- RGB image capture
-- Float32 depth-map capture
-- ARKit confidence-map capture when available
-- Camera pose and intrinsics export
-- Frame timestamps and metadata export
-- Object reconstruction workflow
-- Room measurement workflow
-- Full-room reconstruction workflow
-- Python/Open3D reconstruction backend
-- Local configuration template for safe GitHub usage
-- Git ignore rules for private config, scan data, and generated outputs
+* SwiftUI + ARKit iPhone capture app
+* Live RGB-D streaming to a local backend
+* RGB image capture
+* Float32 depth-map capture
+* ARKit confidence-map capture when available
+* Camera pose and intrinsics export
+* Frame timestamps and metadata export
+* Object reconstruction workflow
+* Room measurement workflow
+* Full-room reconstruction workflow
+* Python/Open3D reconstruction backend
+* Local configuration template for safe GitHub usage
+* Git ignore rules for private config, scan data, and generated outputs
 
 ---
 
@@ -81,17 +119,17 @@ myHut/
 
 ### iOS
 
-- Xcode
-- iPhone or iPad with ARKit scene depth support
-- LiDAR-capable device recommended
-- iOS local network permission enabled
+* Xcode
+* iPhone or iPad with ARKit scene depth support
+* LiDAR-capable device recommended
+* iOS local network permission enabled
 
 ### Backend
 
-- Python 3.10+
-- macOS, Linux, or Windows
-- Open3D-compatible environment
-- iPhone and backend computer on the same local network
+* Python 3.10+
+* macOS, Linux, or Windows
+* Open3D-compatible environment
+* iPhone and backend computer on the same local network
 
 ---
 
@@ -103,7 +141,9 @@ Open the Xcode project:
 open iOS/myHut-iOS/RGBrecoder.xcodeproj
 ```
 
-The app needs your backend computer's local IP address. Copy the example config:
+The app needs your backend computer’s local IP address.
+
+Copy the example config:
 
 ```bash
 cp iOS/myHut-iOS/RGBrecoder/LocalConfig.example.swift \
@@ -119,7 +159,9 @@ enum LocalConfig {
 }
 ```
 
-Find your Mac Wi-Fi IP address:
+Replace `YOUR_MAC_LOCAL_IP` with your Mac or PC local network IP address.
+
+On macOS, you can find your Wi-Fi IP address with:
 
 ```bash
 ipconfig getifaddr en0
@@ -129,7 +171,7 @@ Example:
 
 ```swift
 enum LocalConfig {
-    static let serverIP = "192.168.178.25"
+    static let serverIP = "192.168.1.100"
     static let serverPort = "5001"
 }
 ```
@@ -174,7 +216,7 @@ http://YOUR_MAC_LOCAL_IP:5001
 For example:
 
 ```text
-http://192.168.178.25:5001
+http://192.168.1.100:5001
 ```
 
 ---
@@ -230,13 +272,13 @@ captures/
 
 Each frame may include:
 
-- RGB image
-- depth map
-- confidence map
-- ARKit camera pose
-- camera intrinsics
-- timestamp
-- frame metadata
+* RGB image
+* depth map
+* confidence map
+* ARKit camera pose
+* camera intrinsics
+* timestamp
+* frame metadata
 
 ---
 
@@ -278,6 +320,64 @@ python arkit_reconstruct.py \
 
 ---
 
+## Capture Mode Details
+
+### Object Scan
+
+Use this mode for a single object, furniture item, or small scene component.
+
+Best practices:
+
+* Keep the object centered.
+* Move slowly around the object.
+* Avoid cluttered backgrounds.
+* Avoid reflective, transparent, or very dark materials.
+* Capture the object from multiple angles.
+
+Backend mode:
+
+```text
+object
+```
+
+### Room Measurement
+
+Use this mode to estimate room dimensions from walls, floor, ceiling, and corners.
+
+Best practices:
+
+* Capture all visible walls.
+* Capture floor-wall and ceiling-wall edges.
+* Move slowly along the room perimeter.
+* Avoid relying on furniture surfaces for measurement.
+* Try to include opposite walls when possible.
+
+Backend mode:
+
+```text
+measure_room
+```
+
+### Full Room Scan
+
+Use this mode for a complete room reconstruction, including furniture and layout.
+
+Best practices:
+
+* Walk slowly through the room.
+* Capture furniture, walls, floor, and corners.
+* Revisit key areas from multiple viewpoints.
+* Avoid very fast rotations.
+* Keep lighting stable.
+
+Backend mode:
+
+```text
+room_full
+```
+
+---
+
 ## GitHub Safety
 
 The repository should ignore local, private, and generated files:
@@ -298,18 +398,27 @@ __pycache__/
 
 Do not upload:
 
-- your real `LocalConfig.swift`
-- your local IP address configuration
-- captured RGB-D sessions
-- generated meshes
-- reconstruction outputs
-- Python virtual environments
-- cache files
+* your real `LocalConfig.swift`
+* your local IP address configuration
+* captured RGB-D sessions
+* generated meshes
+* reconstruction outputs
+* Python virtual environments
+* cache files
 
 Only upload the safe template:
 
 ```text
 LocalConfig.example.swift
+```
+
+If a private or generated file was accidentally added, remove it from Git tracking while keeping it locally:
+
+```bash
+git rm --cached path/to/file
+git add .gitignore
+git commit -m "Remove private or generated file from Git"
+git push
 ```
 
 ---
@@ -345,13 +454,13 @@ git commit -m "Update reconstruction pipeline"
 
 For better results:
 
-- Move slowly while scanning.
-- Keep the object or room surfaces in view.
-- Avoid shiny, transparent, or very dark surfaces.
-- Use good lighting.
-- For object scans, keep the object centered and reduce background clutter.
-- For room measurement, capture walls, floor, ceiling edges, and corners.
-- For full-room scans, walk slowly and cover all major surfaces.
+* Move slowly while scanning.
+* Keep the object or room surfaces in view.
+* Avoid shiny, transparent, or very dark surfaces.
+* Use good lighting.
+* For object scans, keep the object centered and reduce background clutter.
+* For room measurement, capture walls, floor, ceiling edges, and corners.
+* For full-room scans, walk slowly and cover all major surfaces.
 
 ---
 
@@ -361,11 +470,17 @@ For better results:
 
 Check that:
 
-- the iPhone and backend computer are on the same Wi-Fi network
-- `LocalConfig.swift` contains the correct local IP address
-- the backend is running on port `5001`
-- your firewall allows incoming connections
-- iOS local network permission is enabled
+* the iPhone and backend computer are on the same Wi-Fi network
+* `LocalConfig.swift` contains the correct local IP address
+* the backend is running on port `5001`
+* your firewall allows incoming connections
+* iOS local network permission is enabled
+
+You can test the backend from another device on the network by visiting:
+
+```text
+http://YOUR_MAC_LOCAL_IP:5001
+```
 
 ### GitHub shows private config or capture data
 
@@ -392,6 +507,26 @@ Then upgrade pip:
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+### No capture appears in `captures/`
+
+Check that:
+
+* the backend server is running
+* the app is sending data to the correct IP address
+* the capture was saved, not discarded
+* the backend received the `/command` save request
+* `incoming/` contains the active session before saving
+
+### Reconstruction fails or produces an empty mesh
+
+Check that:
+
+* the capture folder contains RGB, depth, pose, and intrinsics files
+* the selected backend mode matches the capture mode
+* the depth data is valid
+* the iPhone moved slowly during capture
+* the scan contains enough overlapping viewpoints
 
 ---
 
