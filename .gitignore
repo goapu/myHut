@@ -40,3 +40,5 @@ backend/ark_fusion/data/
 *.bin
 LocalConfig.swift
 **/LocalConfig.swift
+LocalConfig.swift
+**/LocalConfig.swift

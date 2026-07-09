@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  arkit-reconstruct-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myhut-ark-fusion-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./workspace:/tmp/arkit_workspace
+    environment:
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=production
+      - ARKIT_WORKSPACE=/tmp/arkit_workspace
+    restart: unless-stopped
+
+  myhut-upload-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myhut-upload-server
+    command: ["python", "upload_server.py", "--host", "0.0.0.0", "--port", "5001", "--workspace", "/app/myhut_workspace"]
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./myhut_workspace:/app/myhut_workspace
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

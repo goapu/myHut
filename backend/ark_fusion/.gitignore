@@ -1,0 +1,39 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# myHut / ARKit generated data
+incoming/
+captures/
+outputs/
+data/
+rgbd_capture/
+arkit_output/
+results/
+output/
+
+# Heavy generated reconstruction artifacts
+*.ply
+*.obj
+*.glb
+*.stl
+*.bin
+
+# Logs
+*.log
+*.jsonl
+
+# Local/private config
+LocalConfig.swift
+**/LocalConfig.swift
+.env

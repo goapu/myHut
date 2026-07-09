@@ -1,0 +1,15 @@
+mode: room_full
+depth_trunc: 5.0
+min_depth: 0.2
+tsdf_voxel_length: 0.025
+tsdf_sdf_trunc: 0.12
+room_min_component_bbox_diagonal: 0.12
+room_min_component_bbox_extent: 0.025
+room_full_envelope_sample_points: 700000
+room_full_envelope_voxel: 0.035
+room_full_plane_distance: 0.045
+room_full_min_plane_points: 2500
+room_duplicate_layer_voxel: 0.012
+room_duplicate_layer_gap: 0.018
+room_duplicate_layer_collapse_voxel: 0.008
+room_duplicate_layer_score: 0.08

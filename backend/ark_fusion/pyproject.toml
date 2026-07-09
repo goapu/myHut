@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arkit-sensor-fusion"
+version = "0.2.0"
+description = "Modular ARKit RGB-D sensor-fusion reconstruction pipeline with service API"
+requires-python = ">=3.10"
+authors = [{name = "ARKit Fusion Team", email = "dev@example.com"}]
+license = {text = "Apache 2.0"}
+keywords = ["arkit", "3d-reconstruction", "rgb-d", "sensor-fusion", "open3d"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
+    "Topic :: Scientific/Engineering :: Image Processing",
+]
+dependencies = [
+    "numpy>=1.21",
+    "opencv-python>=4.5",
+    "open3d>=0.14",
+    "pyyaml>=6.0",
+    "flask>=2.3",
+    "werkzeug>=2.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "mypy>=1.0",
+    "flake8>=6.0",
+]
+service = [
+    "flask>=2.3",
+    "werkzeug>=2.3",
+    "gunicorn>=20.0",
+]
+docs = [
+    "sphinx>=5.0",
+    "sphinx-rtd-theme>=1.0",
+]
+
+[project.scripts]
+arkit-reconstruct = "arkit_sensor_fusion.pipeline:main"
+arkit-service = "service.api:main"
+
+[tool.setuptools]
+packages = ["arkit_sensor_fusion", "service", "evaluation"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.black]
+line-length = 120
+target-version = ['py310', 'py311', 'py312']
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.flake8]
+max-line-length = 120
+extend-ignore = ["E203", "W503"]

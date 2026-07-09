@@ -1,0 +1,13 @@
+mode: measure_room
+depth_trunc: 5.5
+min_depth: 0.2
+tsdf_voxel_length: 0.03
+tsdf_sdf_trunc: 0.15
+room_sample_points: 1000000
+room_plane_voxel: 0.025
+room_plane_distance: 0.04
+room_min_plane_points: 3000
+room_duplicate_layer_voxel: 0.012
+room_duplicate_layer_gap: 0.018
+room_duplicate_layer_collapse_voxel: 0.008
+room_duplicate_layer_score: 0.08

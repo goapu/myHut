@@ -1,0 +1,6 @@
+flask>=2.3
+werkzeug>=2.3
+numpy>=1.21
+opencv-python>=4.5
+open3d>=0.14
+pyyaml>=6.0
