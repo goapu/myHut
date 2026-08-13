@@ -4,7 +4,6 @@
 
 The project combines a SwiftUI + ARKit iOS app with an `ark_fusion` backend. The iPhone captures RGB images, depth maps, camera poses, intrinsics, confidence maps, timestamps, and metadata, then streams them to a local backend server for saving and reconstruction.
 
-> This project is currently maintained as a private development repository.
 
 ---
 
